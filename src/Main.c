@@ -24,13 +24,13 @@ QueryLanguage_Client client;
 
 #define SIGNAL_PLAYER_ID    (SIGNAL_START + 1)
 
-void Client_Proc_Connect(void* parent,Client* c,void* data,int size){
+void Client_Proc_Connect(void* parent,Signal s,Client* c,void* data,int size){
     printf("Client_Connect(%d)\n",c->sockfd);
 }
-void Client_Proc_Disconnect(void* parent,Client* c,void* data,int size){
+void Client_Proc_Disconnect(void* parent,Signal s,Client* c,void* data,int size){
     printf("Client_Disconnect(%d)\n",c->sockfd);
 }
-void Client_Proc_PlayerId(void* parent,Client* c,void* data,int size){
+void Client_Proc_PlayerId(void* parent,Signal s,Client* c,void* data,int size){
 	playerid = *(unsigned int*)data;
     printf("Client_Id(%d): %d\n",c->sockfd,playerid);
 }
@@ -39,14 +39,16 @@ void Setup(AlxWindow* w){
 	AlxFont_Resize(&window.AlxFont,32,32);
 
 	ps4c = PS4_Controller_New("/dev/input/by-id/usb-Sony_Interactive_Entertainment_Wireless_Controller-if03-event-joystick");
+	//ps4c = PS4_Controller_Null();
+	
 	world = MarioWorld_New("./assets/World/Level0.txt","./assets/Blocks/","./assets/Entity/","./assets/Shooters/");
 	MarioWorld_AudioPlayerStart(&world);
 
 	prevscore = 0U;
-	client = QueryLanguage_Client_Make(5900,"192.168.2.99",(SignalHandler[]){
-        SignalHandler_New(SIGNAL_CONNECT,(void(*)(void*,void*,void*,int))Client_Proc_Connect),
-        SignalHandler_New(SIGNAL_DISCONNECT,(void(*)(void*,void*,void*,int))Client_Proc_Disconnect),
-        SignalHandler_New(SIGNAL_PLAYER_ID,(void(*)(void*,void*,void*,int))Client_Proc_PlayerId),
+	client = QueryLanguage_Client_Make("5900","192.168.2.99",(SignalHandler[]){
+        SignalHandler_New(SIGNAL_CONNECT,(void(*)(void*,Signal,void*,void*,int))Client_Proc_Connect),
+        SignalHandler_New(SIGNAL_DISCONNECT,(void(*)(void*,Signal,void*,void*,int))Client_Proc_Disconnect),
+        SignalHandler_New(SIGNAL_PLAYER_ID,(void(*)(void*,Signal,void*,void*,int))Client_Proc_PlayerId),
         SignalHandler_Null()
     });
 }
@@ -308,9 +310,8 @@ void Update(AlxWindow* w){
 		CStr_RenderAlxFontf(WINDOW_STD_ARGS,&window.AlxFont,0.0f,window.AlxFont.CharSizeY,WHITE,"Score: %d",(Number)((Mario*)world.mario.e)->score);
 }
 void Delete(AlxWindow* w){
-	MarioWorld_Free(&world);
 	PS4_Controller_Free(&ps4c);
-
+	MarioWorld_Free(&world);
     Client_Free(&client);
 }
 
