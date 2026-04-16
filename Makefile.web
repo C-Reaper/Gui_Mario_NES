@@ -1,0 +1,30 @@
+# === Makefile.web ===
+
+CC = emcc
+CFLAGS = -O0 -msimd128 -mavx2 -std=gnu17
+INCLUDES = -Isrc -D_WEB -sINITIAL_MEMORY=169082880
+LDFLAGS = -s USE_SDL=0
+SRC_DIR = ./src
+BUILD_DIR = ./build
+TARGET = $(BUILD_DIR)/index.html
+
+SRCS = $(wildcard $(SRC_DIR)/*.c)
+OBJS = $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(SRCS))
+
+all: $(BUILD_DIR) $(TARGET)
+
+$(BUILD_DIR):
+	mkdir -p $(BUILD_DIR)
+
+$(TARGET): $(SRCS)
+	$(CC) $(CFLAGS) $(INCLUDES) $(SRCS) -o $(TARGET) $(LDFLAGS)
+
+exe: $(TARGET)
+	emrun --no_browser --port 8080 $(BUILD_DIR)
+
+clean:
+	rm -f $(BUILD_DIR)/*
+
+do: clean all exe
+
+# === Makefile.web ===
