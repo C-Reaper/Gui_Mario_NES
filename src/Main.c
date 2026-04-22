@@ -6,7 +6,6 @@
 #include "/home/codeleaded/System/Static/Library/Geometry.h"
 #include "/home/codeleaded/System/Static/Library/AudioPlayer.h"
 #include "/home/codeleaded/System/Static/Library/PS4_Controller.h"
-#include "/home/codeleaded/System/Static/Library/PPTX_Controller.h"
 #include "/home/codeleaded/System/Static/Library/Networking.h"
 #include "/home/codeleaded/System/Static/Library/QueryLanguage.h"
 

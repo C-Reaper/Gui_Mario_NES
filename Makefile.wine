@@ -3,7 +3,7 @@
 CC = x86_64-w64-mingw32-gcc
 CFLAGS = -O0 -mavx2 -std=gnu17
 INCLUDES = -Isrc -D_WINE
-LDFLAGS = -luser32 -lgdi32 -lwinmm
+LDFLAGS = -luser32 -lgdi32 -lwinmm -lxinput9_1_0
 SRC_DIR = ./src
 BUILD_DIR = ./build
 TARGET = $(BUILD_DIR)/Main.exe

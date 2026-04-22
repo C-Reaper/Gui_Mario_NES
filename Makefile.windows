@@ -3,7 +3,7 @@
 CC = gcc
 CFLAGS = -O0 -mavx2 -std=gnu17
 INCLUDES = -Isrc
-LDFLAGS = -lm -luser32 -lgdi32 -lwinmm
+LDFLAGS = -lm -luser32 -lgdi32 -lwinmm -lxinput9_1_0
 
 SRC_DIR = src
 BUILD_DIR = build
