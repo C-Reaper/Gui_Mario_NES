@@ -6,8 +6,6 @@
 #include "/home/codeleaded/System/Static/Library/Geometry.h"
 #include "/home/codeleaded/System/Static/Library/AudioPlayer.h"
 #include "/home/codeleaded/System/Static/Library/PS4_Controller.h"
-#include "/home/codeleaded/System/Static/Library/Networking.h"
-#include "/home/codeleaded/System/Static/Library/QueryLanguage.h"
 
 #include "World.h"
 #include "Figure.h"
@@ -18,21 +16,7 @@ PS4_Controller ps4c;
 
 unsigned int prevscore;
 unsigned int playerid;
-QueryLanguage_Client client;
 
-
-#define SIGNAL_PLAYER_ID    (SIGNAL_START + 1)
-
-void Client_Proc_Connect(void* parent,Signal s,Client* c,void* data,int size){
-    printf("Client_Connect(%d)\n",c->sockfd);
-}
-void Client_Proc_Disconnect(void* parent,Signal s,Client* c,void* data,int size){
-    printf("Client_Disconnect(%d)\n",c->sockfd);
-}
-void Client_Proc_PlayerId(void* parent,Signal s,Client* c,void* data,int size){
-	playerid = *(unsigned int*)data;
-    printf("Client_Id(%d): %d\n",c->sockfd,playerid);
-}
 
 void Setup(AlxWindow* w){
 	AlxFont_Resize(&window.AlxFont,32,32);
@@ -44,27 +28,8 @@ void Setup(AlxWindow* w){
 	MarioWorld_AudioPlayerStart(&world);
 
 	prevscore = 0U;
-	client = QueryLanguage_Client_Make("5900","192.168.2.99",(SignalHandler[]){
-        SignalHandler_New(SIGNAL_CONNECT,(void(*)(void*,Signal,void*,void*,int))Client_Proc_Connect),
-        SignalHandler_New(SIGNAL_DISCONNECT,(void(*)(void*,Signal,void*,void*,int))Client_Proc_Disconnect),
-        SignalHandler_New(SIGNAL_PLAYER_ID,(void(*)(void*,Signal,void*,void*,int))Client_Proc_PlayerId),
-        SignalHandler_Null()
-    });
 }
 void Update(AlxWindow* w){
-	Client_Update(&client);
-	Client_DoAll(&client,NULL);
-	
-	if(world.mario.e->id==ENTITY_MARIO && prevscore != ((Mario*)world.mario.e)->score){
-		prevscore = ((Mario*)world.mario.e)->score;
-		
-		QueryLanguage_Client_Send(&client,(DataPair[]){
-			DataPair_New((unsigned int[]){ playerid },sizeof(unsigned int)),
-			DataPair_New("Alex",sizeof("Alex")),
-			DataPair_New((unsigned int[]){ prevscore },sizeof(unsigned int)),
-			DataPair_Null()
-		});
-	}
 
 	PS4_Controller_Update(&ps4c);
 	
@@ -188,9 +153,9 @@ void Update(AlxWindow* w){
 			Figure_Move(&world.mario,-1.0f);
 		else if(Stroke(ALX_KEY_D).DOWN)
 			Figure_Move(&world.mario,1.0f);
-		else if(abs >= 0 && abs < 128) 								Figure_Move(&world.mario,F32_Map(abs,0.0f,255.0f,-1.0f,1.0f));
-		else if(abs >= 128) 										Figure_Move(&world.mario,F32_Map(abs,0.0f,255.0f,-1.0f,1.0f));
-		else 														Figure_Move(&world.mario,0.0f);
+		else if(abs >= 0 && abs < 100) 	Figure_Move(&world.mario,F32_Map(abs,0.0f,255.0f,-1.0f,1.0f));// DZ: -28
+		else if(abs >= 156) 			Figure_Move(&world.mario,F32_Map(abs,0.0f,255.0f,-1.0f,1.0f));// DZ: +28
+		else 							Figure_Move(&world.mario,0.0f);
 		
 		if(world.mario.e->id==ENTITY_MARIO){
 			if(Stroke(ALX_KEY_W).PRESSED || PS4_Controller_Key(&ps4c,PS4_CONTROLLER_X).PRESSED){
@@ -311,7 +276,6 @@ void Update(AlxWindow* w){
 void Delete(AlxWindow* w){
 	PS4_Controller_Free(&ps4c);
 	MarioWorld_Free(&world);
-    Client_Free(&client);
 }
 
 int main(){
