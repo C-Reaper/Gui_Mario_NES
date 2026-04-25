@@ -304,7 +304,7 @@ void Update(AlxWindow* w){
 		}
 	}
 
-	CStr_RenderAlxFontf(WINDOW_STD_ARGS,&window.AlxFont,0.0f,0.0f,WHITE,"S:%d,%d | L:%d",window.Width,window.Height,world.level);
+	CStr_RenderAlxFontf(WINDOW_STD_ARGS,&window.AlxFont,0.0f,0.0f,WHITE,"S:%d,%d | L:%d",(Number)window.Width,(Number)window.Height,(Number)world.level);
 	
 	if(world.mario.e->id==ENTITY_MARIO)
 		CStr_RenderAlxFontf(WINDOW_STD_ARGS,&window.AlxFont,0.0f,window.AlxFont.CharSizeY,WHITE,"Score: %d",(Number)((Mario*)world.mario.e)->score);
