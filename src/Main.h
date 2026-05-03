@@ -24,19 +24,19 @@ QueryLanguage_Client client;
 
 #define SIGNAL_PLAYER_ID    (SIGNAL_START + 1)
 
-void Client_Proc_Connect(void* parent,Signal s,Client* c,void* data,int size){
+void Client_Proc_Connect(void* parent,Signal s,Client* c,void* data,PackageSize size){
     printf("Client_Connect(%d)\n",c->sockfd);
 }
-void Client_Proc_Disconnect(void* parent,Signal s,Client* c,void* data,int size){
+void Client_Proc_Disconnect(void* parent,Signal s,Client* c,void* data,PackageSize size){
     printf("Client_Disconnect(%d)\n",c->sockfd);
 }
-void Client_Proc_PlayerId(void* parent,Signal s,Client* c,void* data,int size){
+void Client_Proc_PlayerId(void* parent,Signal s,Client* c,void* data,PackageSize size){
 	playerid = *(unsigned int*)data;
     printf("Client_Id(%d): %d\n",c->sockfd,playerid);
 }
 
 void Setup(AlxWindow* w){
-	AlxFont_Resize(&window.AlxFont,32,32);
+	AlxFont_Resize(&window.font,32,32);
 
 	ps4c = PS4_Controller_New("/dev/input/by-id/usb-Sony_Interactive_Entertainment_Wireless_Controller-if03-event-joystick");
 	//ps4c = PS4_Controller_Null();
@@ -46,9 +46,9 @@ void Setup(AlxWindow* w){
 
 	prevscore = 0U;
 	client = QueryLanguage_Client_Make("5900","192.168.2.99",(SignalHandler[]){
-        SignalHandler_New(SIGNAL_CONNECT,(void(*)(void*,Signal,void*,void*,int))Client_Proc_Connect),
-        SignalHandler_New(SIGNAL_DISCONNECT,(void(*)(void*,Signal,void*,void*,int))Client_Proc_Disconnect),
-        SignalHandler_New(SIGNAL_PLAYER_ID,(void(*)(void*,Signal,void*,void*,int))Client_Proc_PlayerId),
+        SignalHandler_New(SIGNAL_CONNECT,(void(*)(void*,Signal,void*,void*,PackageSize))Client_Proc_Connect),
+        SignalHandler_New(SIGNAL_DISCONNECT,(void(*)(void*,Signal,void*,void*,PackageSize))Client_Proc_Disconnect),
+        SignalHandler_New(SIGNAL_PLAYER_ID,(void(*)(void*,Signal,void*,void*,PackageSize))Client_Proc_PlayerId),
         SignalHandler_Null()
     });
 }
@@ -283,7 +283,7 @@ void Update(AlxWindow* w){
 	// 	Animation* a = (Animation*)Vector_Get(&world.animations,i);
 	// 	Sprite* s = (Sprite*)Vector_Get(a,0);
 	// 	String str = String_Format("S:%d,%d",s->w,s->h);
-	// 	CStr_RenderSizeAlxFont(WINDOW_STD_ARGS,&window.AlxFont,str.Memory,str.size,0.0f,i * window.AlxFont.CharSizeY,WHITE);
+	// 	CStr_RenderSizeAlxFont(WINDOW_STD_ARGS,&window.font,str.Memory,str.size,0.0f,i * window.font.CharSizeY,WHITE);
 	// 	String_Free(&str);
 	// }
 
@@ -304,10 +304,10 @@ void Update(AlxWindow* w){
 		}
 	}
 
-	CStr_RenderAlxFontf(WINDOW_STD_ARGS,&window.AlxFont,0.0f,0.0f,WHITE,"S:%d,%d | L:%d",(Number)window.Width,(Number)window.Height,(Number)world.level);
+	CStr_RenderAlxFontf(WINDOW_STD_ARGS,&window.font,0.0f,0.0f,WHITE,"S:%d,%d | L:%d",(Number)window.Width,(Number)window.Height,(Number)world.level);
 	
 	if(world.mario.e->id==ENTITY_MARIO)
-		CStr_RenderAlxFontf(WINDOW_STD_ARGS,&window.AlxFont,0.0f,window.AlxFont.CharSizeY,WHITE,"Score: %d",(Number)((Mario*)world.mario.e)->score);
+		CStr_RenderAlxFontf(WINDOW_STD_ARGS,&window.font,0.0f,window.font.CharSizeY,WHITE,"Score: %d",(Number)((Mario*)world.mario.e)->score);
 }
 void Delete(AlxWindow* w){
 	PS4_Controller_Free(&ps4c);

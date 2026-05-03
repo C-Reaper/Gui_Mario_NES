@@ -1,7 +1,8 @@
 # === Makefile.linux ===
 
 CC = gcc
-CFLAGS = -O0 -mavx2 -std=gnu17
+WARNINGS = -Werror
+CFLAGS = -O0 -mavx2 -std=gnu17 $(WARNINGS)
 INCLUDES = -Isrc
 LDFLAGS = -lm -lX11 -lpng -ljpeg -lasound
 SRC_DIR = src

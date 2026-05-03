@@ -1,7 +1,8 @@
 # === Makefile.wine ===
 
 CC = x86_64-w64-mingw32-gcc
-CFLAGS = -O0 -mavx2 -std=gnu17
+WARNINGS = -Werror
+CFLAGS = -O0 -mavx2 -std=gnu17 $(WARNINGS)
 INCLUDES = -Isrc -D_WINE
 LDFLAGS = -luser32 -lgdi32 -lwinmm -lxinput9_1_0
 SRC_DIR = ./src
