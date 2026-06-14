@@ -4,7 +4,7 @@ CC = gcc
 WARNINGS = -Werror
 CFLAGS = -O0 -mavx2 -std=gnu17 $(WARNINGS)
 INCLUDES = -Isrc
-LDFLAGS = -lm -luser32 -lgdi32 -lwinmm -lxinput9_1_0
+LDFLAGS = -lm -luser32 -lgdi32 -lwinmm -lxinput9_1_0 -lole32 -loleaut32 -lwindowscodecs -lmfplat -lmf -lmfreadwrite -lmfuuid
 
 SRC_DIR = src
 BUILD_DIR = build
