@@ -44,7 +44,7 @@ void Setup(AlxWindow* w){
 	MarioWorld_AudioPlayerStart(&world);
 
 	prevscore = 0U;
-	client = QueryLanguage_Client_Make("5900","192.168.2.99",(Net_EventHandler[]){
+	client = QueryLanguage_Client_Make("5900","192.168.1.48",(Net_EventHandler[]){
 		Net_EventHandler_New(NET_EVENT_CONNECT,     Net_EventClient_Proc_Connect),
         Net_EventHandler_New(NET_EVENT_DISCONNECT,  Net_EventClient_Proc_Disconnect),
         Net_EventHandler_New(NET_EVENT_PLAYER_ID,   Net_EventClient_Proc_PlayerId),
