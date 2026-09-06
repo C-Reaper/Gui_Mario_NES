@@ -738,13 +738,11 @@ void World_EntityCollision(World* w,Entity* src){
 void World_Collisions(World* w,TransformedView* tv){
 	for(int i = 0;i<w->entities.size;i++){
 		Entity* e = (Entity*)PVector_Get(&w->entities,i);
-		EntityAtlas* ea = (EntityAtlas*)Vector_Get(&w->entityatlas,e->id - 1);
+		EntityAtlas* ea = (EntityAtlas*)Vector_Get(&w->entityatlas,e->id - 1U);
 		
-		if(ea && TransformedView_inViewRect(tv,e->r)){
+		if(e->id < (unsigned int)w->entityatlas.size + 1U && TransformedView_inViewRect(tv,e->r)){
 			World_EntityCollision(w,e);
-			
-			if(e == (Entity*)PVector_Get(&w->entities,i))
-				World_Collision(w,e);
+			World_Collision(w,e);
 		}
 	}
 }

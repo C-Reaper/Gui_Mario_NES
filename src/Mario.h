@@ -2647,7 +2647,7 @@ char Mario_IsSolid(Mario* m,World* w,unsigned int x,unsigned int y,Side s){
 	Block b = World_Get(w,x,y);
 
 	if(b==BLOCK_COIN){
-		AudioPlayer_Add(&((MarioWorld*)w)->ap,"./assets/Sound/Coin.wav");
+		AudioPlayer_Add(&((MarioWorld*)w)->ap,"./assets/Sound/Coin.mp3");
 		World_Set(w,x,y,BLOCK_NONE);
 		
 		//World_Spawn(w,ENTITY_POINTS,(Vec2){ x,y });

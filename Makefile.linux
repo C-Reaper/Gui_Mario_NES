@@ -2,7 +2,7 @@
 
 CC = gcc
 WARNINGS = -Werror
-CFLAGS = -O0 -mavx2 -std=gnu17 $(WARNINGS)
+CFLAGS = -O3 -mavx2 -std=gnu17 $(WARNINGS)
 INCLUDES = -Isrc
 LDFLAGS = -lm -lX11 -lpng -ljpeg -lasound
 SRC_DIR = src
