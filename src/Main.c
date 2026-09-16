@@ -52,10 +52,6 @@ void Setup(AlxWindow* w){
     });
 }
 void Update(AlxWindow* w){
-	if(!Net_Client_Valid(&client.client)){
-		Net_Client_Reconnect(&client.client,"5900","192.168.1.48");
-	}
-
 	Net_EventClient_Update(&client);
 	Net_EventClient_DoAll(&client,NULL);
 	
@@ -80,6 +76,12 @@ void Update(AlxWindow* w){
 		w->Running = 0;
 	}
 
+	if(Stroke(ALX_KEY_P).PRESSED){
+		if(!Net_Client_Valid(&client.client)){
+			Net_Client_Reconnect(&client.client,"5900","192.168.178.99");
+			w->LastTime = Time_Nano();
+		}
+	}
 	if(Stroke(ALX_KEY_Q).PRESSED){
 		world.world.mode = world.world.mode==ANIMATIONBG_DG ? ANIMATIONBG_ALL : ANIMATIONBG_DG;
 	}
