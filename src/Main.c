@@ -1,21 +1,21 @@
 //#define IMAGE_PNG_ONLY
 
-#if defined __linux__ || defined _WINE
+#if defined __linux__ || defined _WINE || defined _WEB
+#include "/home/codeleaded/System/Static/Library/QueryLanguage.h"
 #include "/home/codeleaded/System/Static/Library/PS4_Controller.h"
 #include "/home/codeleaded/System/Static/Library/WindowEngine.h"
 #include "/home/codeleaded/System/Static/Library/Files.h"
 #include "/home/codeleaded/System/Static/Library/TransformedView.h"
 #include "/home/codeleaded/System/Static/Library/Geometry.h"
 #include "/home/codeleaded/System/Static/Library/AudioPlayer.h"
-#include "/home/codeleaded/System/Static/Library/QueryLanguage.h"
 #elif defined _WIN32
+#include "F:/home/codeleaded/System/Static/Library/QueryLanguage.h"
 #include "F:/home/codeleaded/System/Static/Library/PS4_Controller.h"
 #include "F:/home/codeleaded/System/Static/Library/WindowEngine.h"
 #include "F:/home/codeleaded/System/Static/Library/Files.h"
 #include "F:/home/codeleaded/System/Static/Library/TransformedView.h"
 #include "F:/home/codeleaded/System/Static/Library/Geometry.h"
 #include "F:/home/codeleaded/System/Static/Library/AudioPlayer.h"
-#include "F:/home/codeleaded/System/Static/Library/QueryLanguage.h"
 #endif
 
 #include "World.h"
@@ -50,15 +50,16 @@ void Setup(AlxWindow* w){
 	//ps4c = PS4_Controller_Null();
 	
 	world = MarioWorld_New("./assets/World/Level0.txt","./assets/Blocks/","./assets/Entity/","./assets/Shooters/");
-	MarioWorld_AudioPlayerStart(&world);
+	//MarioWorld_AudioPlayerStart(&world);
 
 	prevscore = 0U;
-	client = QueryLanguage_Client_Make("5900","192.168.178.20",(Net_EventHandler[]){
+	client = QueryLanguage_Client_Make("5900","192.168.178.99",(Net_EventHandler[]){
 		Net_EventHandler_New(NET_EVENT_CONNECT,     Net_EventClient_Proc_Connect),
         Net_EventHandler_New(NET_EVENT_DISCONNECT,  Net_EventClient_Proc_Disconnect),
         Net_EventHandler_New(NET_EVENT_PLAYER_ID,   Net_EventClient_Proc_PlayerId),
         Net_EventHandler_Null()
     });
+	//client = QueryLanguage_Client_Null();
 }
 void Update(AlxWindow* w){
 	Net_EventClient_Update(&client);
@@ -332,7 +333,7 @@ void Delete(AlxWindow* w){
 }
 
 int main(){
-    if(Create("Mario NES",1920,1080,1,1,Setup,Update,Delete))
+    if(Create("Mario NES",400,300,4,4,Setup,Update,Delete))
         Start();
     return 0;
 }

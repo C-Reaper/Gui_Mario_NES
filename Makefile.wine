@@ -30,7 +30,7 @@ exe: $(TARGET)
 	WINEPREFIX=~/wine64 WINEARCH=win64 wine $(TARGET)
 
 clean:
-	rm -f $(BUILD_DIR)/*
+	rm -rf $(BUILD_DIR)/*
 
 dg: clean alldebug debug
 

@@ -19,7 +19,7 @@ ifeq ($(findstring cmd,$(SHELL)),cmd)
     RUN_CMD   = $(TARGET)
 else
     MKDIR_CMD = mkdir -p $(BUILD_DIR)
-    CLEAN_CMD = rm -f $(BUILD_DIR)/*.o $(TARGET)
+    CLEAN_CMD = rm -rf $(BUILD_DIR)/*.o $(TARGET)
     RUN_CMD   = ./$(TARGET)
 endif
 

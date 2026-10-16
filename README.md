@@ -41,13 +41,24 @@ make -f Makefile.wine all
 ```
 
 ### WebAssembly
-To build and serve the project as a web application, run:
+The browser client connects to the separate `Gui_Mario_DB` server at
+`192.168.178.99:5900`. Start that server first. Then build and run the browser
+client:
+
 ```sh
-cd <Project>
-make -f Makefile.web all
-make -f Makefile.web exe
+make -f Makefile.web do
 ```
-Access the application in your web browser at `http://localhost:8080`.
+
+The `do` target builds the application and starts the WebSocket-to-POSIX proxy
+and web server. It checks that ports 8080 and 8081 are free before cleaning or
+rebuilding. The `exe` target starts the proxy and serves the app at
+`http://localhost:8080`. Open that exact `localhost` URL on the same machine:
+WebAssembly threads require a secure context, and browsers treat `localhost`
+as secure even over HTTP. An HTTP URL using a LAN IP is not secure, even when
+the response has the COOP/COEP headers that `emrun` supplies. For access from
+another machine, serve the page over HTTPS instead. The POSIX proxy must run
+on a machine that can reach the database server; keep the proxy on a trusted
+network.
 
 ---
 
