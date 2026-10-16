@@ -1,6 +1,6 @@
 //#define IMAGE_PNG_ONLY
 
-#include "/home/codeleaded/System/Static/Library/PPTX_Controller.h"
+#if defined __linux__ || defined _WINE
 #include "/home/codeleaded/System/Static/Library/PS4_Controller.h"
 #include "/home/codeleaded/System/Static/Library/WindowEngine.h"
 #include "/home/codeleaded/System/Static/Library/Files.h"
@@ -8,6 +8,15 @@
 #include "/home/codeleaded/System/Static/Library/Geometry.h"
 #include "/home/codeleaded/System/Static/Library/AudioPlayer.h"
 #include "/home/codeleaded/System/Static/Library/QueryLanguage.h"
+#elif defined _WIN32
+#include "F:/home/codeleaded/System/Static/Library/PS4_Controller.h"
+#include "F:/home/codeleaded/System/Static/Library/WindowEngine.h"
+#include "F:/home/codeleaded/System/Static/Library/Files.h"
+#include "F:/home/codeleaded/System/Static/Library/TransformedView.h"
+#include "F:/home/codeleaded/System/Static/Library/Geometry.h"
+#include "F:/home/codeleaded/System/Static/Library/AudioPlayer.h"
+#include "F:/home/codeleaded/System/Static/Library/QueryLanguage.h"
+#endif
 
 #include "World.h"
 #include "Figure.h"
@@ -24,7 +33,7 @@ QueryLanguage_Client client;
 #define NET_EVENT_PLAYER_ID    (NET_EVENT_START + 1)
 
 void Net_EventClient_Proc_Connect(void* parent,Net_EventClient* c,Net_EventPackage* p){
-    printf("Client_Connect(%u)\n",(uint32_t)Net_Client_Id(&c->client));
+	printf("Client_Connect(%u)\n",(uint32_t)Net_Client_Id(&c->client));
 }
 void Net_EventClient_Proc_Disconnect(void* parent,Net_EventClient* c,Net_EventPackage* p){
     printf("Client_Disconnect(%u)\n",(uint32_t)Net_Client_Id(&c->client));
@@ -44,7 +53,7 @@ void Setup(AlxWindow* w){
 	MarioWorld_AudioPlayerStart(&world);
 
 	prevscore = 0U;
-	client = QueryLanguage_Client_Make("5900","192.168.1.48",(Net_EventHandler[]){
+	client = QueryLanguage_Client_Make("5900","192.168.178.20",(Net_EventHandler[]){
 		Net_EventHandler_New(NET_EVENT_CONNECT,     Net_EventClient_Proc_Connect),
         Net_EventHandler_New(NET_EVENT_DISCONNECT,  Net_EventClient_Proc_Disconnect),
         Net_EventHandler_New(NET_EVENT_PLAYER_ID,   Net_EventClient_Proc_PlayerId),
@@ -309,10 +318,12 @@ void Update(AlxWindow* w){
 		}
 	}
 
-	CStr_RenderAlxFontf(WINDOW_STD_ARGS,&window.font,0.0f,0.0f,WHITE,"S:%d,%d | L:%d",(Number)window.Width,(Number)window.Height,(Number)world.level);
+
+	CStr_RenderAlxFontf(WINDOW_STD_ARGS,&window.font,0.0f,0.0f,WHITE,"Q DBG, BLOCK: 1 PRE, 2 POST, LVL: 7 DOWN,8 UP,9 LOAD,0 SAVE");
+	CStr_RenderAlxFontf(WINDOW_STD_ARGS,&window.font,0.0f,window.font.CharSizeY,WHITE,"S:%d,%d | L:%d",(Number)window.Width,(Number)window.Height,(Number)world.level);
 	
 	if(world.mario.e->id==ENTITY_MARIO)
-		CStr_RenderAlxFontf(WINDOW_STD_ARGS,&window.font,0.0f,window.font.CharSizeY,WHITE,"Score: %d",(Number)((Mario*)world.mario.e)->score);
+		CStr_RenderAlxFontf(WINDOW_STD_ARGS,&window.font,0.0f,2 * window.font.CharSizeY,WHITE,"Score: %d",(Number)((Mario*)world.mario.e)->score);
 }
 void Delete(AlxWindow* w){
 	PS4_Controller_Free(&ps4c);

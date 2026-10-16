@@ -4,7 +4,7 @@ CC = emcc
 WARNINGS = -Werror
 CFLAGS = -O0 -msimd128 -mavx2 -std=gnu17 $(WARNINGS)
 INCLUDES = -Isrc -D_WEB -sINITIAL_MEMORY=169082880
-LDFLAGS = -s USE_SDL=0
+LDFLAGS = -s USE_SDL=0 --preload-file assets/
 SRC_DIR = ./src
 BUILD_DIR = ./build
 TARGET = $(BUILD_DIR)/index.html
