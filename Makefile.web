@@ -3,7 +3,7 @@
 CC = emcc
 WARNINGS = -Werror
 CFLAGS = -O3 -msimd128 -mavx2 -std=gnu17 -pthread $(WARNINGS)
-INCLUDES = -Isrc -D_WEB -sINITIAL_MEMORY=169082880
+INCLUDES = -Isrc -D_WEB -sINITIAL_MEMORY=338165760
 LDFLAGS = -pthread -sPROXY_TO_PTHREAD -sPROXY_POSIX_SOCKETS -sPTHREAD_POOL_SIZE=2 -s USE_SDL=0 -lwebsocket.js --preload-file assets/
 SRC_DIR = ./src
 BUILD_DIR = ./build

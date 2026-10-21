@@ -350,10 +350,7 @@ SubSprite Bowler_GetRender(Bowler* e,EntityAtlas* ea){
 	unsigned int dx = ea->atlas.w / ea->cx;
 	unsigned int dy = ea->atlas.h / ea->cy;
 
-	FDuration d = Time_Elapsed(0UL,Time_Nano());
-	d = d - F32_Floor(d);
-	d *= F32_Abs(e->e.v.x) * 1.5f;
-	d = d - F32_Floor(d);
+	FDuration d = Animation_Phase(0UL,F32_Abs(e->e.v.x) * 1.5f);
 	ox = 0U + (int)(2.0f * d);
 
 	if(e->e.v.x > 0.0f) ox = 4 - ox;
@@ -523,10 +520,7 @@ SubSprite Bowser_GetRender(Bowser* e,EntityAtlas* ea){
 	unsigned int dx = ea->atlas.w / ea->cx;
 	unsigned int dy = ea->atlas.h / ea->cy;
 
-	FDuration d = Time_Elapsed(0UL,Time_Nano());
-	d = d - F32_Floor(d);
-	d *= F32_Abs(e->e.v.x) * 1.0f;
-	d = d - F32_Floor(d);
+	FDuration d = Animation_Phase(0UL,F32_Abs(e->e.v.x) * 1.0f);
 	unsigned int a = (int)(2.0f * d);
 
 	if(e->start > 0UL && Time_Elapsed(e->start,Time_Nano()) > BOWSER_THROW_DELAY * 0.5f)
@@ -696,10 +690,7 @@ SubSprite Bro_GetRender(Bro* e,EntityAtlas* ea){
 	unsigned int dx = ea->atlas.w / ea->cx;
 	unsigned int dy = ea->atlas.h / ea->cy;
 	
-	FDuration d = Time_Elapsed(0UL,Time_Nano());
-	d = d - F32_Floor(d);
-	d *= F32_Abs(e->e.v.x) * 1.0f;
-	d = d - F32_Floor(d);
+	FDuration d = Animation_Phase(0UL,F32_Abs(e->e.v.x) * 1.0f);
 	ox = (int)(3.0f * d);
 
 	if(e->dir) ox = 5U - ox;
@@ -873,10 +864,7 @@ SubSprite Coopa_GetRender(Coopa* e,EntityAtlas* ea){
 	unsigned int dx = ea->atlas.w / ea->cx;
 	unsigned int dy = ea->atlas.h / ea->cy;
 
-	FDuration d = Time_Elapsed(0UL,Time_Nano());
-	d = d - F32_Floor(d);
-	d *= F32_Abs(e->e.v.x) * 0.5f;
-	d = d - F32_Floor(d);
+	FDuration d = Animation_Phase(0UL,F32_Abs(e->e.v.x) * 0.5f);
 	unsigned int a = (int)(2.0f * d);
 	ox = 2U + a;
 
@@ -1012,10 +1000,7 @@ SubSprite Fish_GetRender(Fish* e,EntityAtlas* ea){
 	unsigned int dx = ea->atlas.w / ea->cx;
 	unsigned int dy = ea->atlas.h / ea->cy;
 	
-	FDuration d = Time_Elapsed(0UL,Time_Nano());
-	d = d - F32_Floor(d);
-	d *= F32_Abs(e->e.v.x) * 0.5f;
-	d = d - F32_Floor(d);
+	FDuration d = Animation_Phase(0UL,F32_Abs(e->e.v.x) * 0.5f);
 	ox = 0U + (int)(2.0f * d);
 
 	if(e->e.v.x > 0.0f) ox = 3U - ox;
@@ -1114,10 +1099,7 @@ SubSprite Gumba_GetRender(Gumba* e,EntityAtlas* ea){
 	unsigned int dx = ea->atlas.w / ea->cx;
 	unsigned int dy = ea->atlas.h / ea->cy;
 
-	FDuration d = Time_Elapsed(0UL,Time_Nano());
-	d = d - F32_Floor(d);
-	d *= F32_Abs(e->e.v.x) * 0.5f;
-	d = d - F32_Floor(d);
+	FDuration d = Animation_Phase(0UL,F32_Abs(e->e.v.x) * 0.5f);
 	ox = 0U + (int)(2.0f * d);
 
 	if(e->dead) ox = 2;
@@ -1324,10 +1306,7 @@ SubSprite PlantUG_GetRender(PlantUG* e,EntityAtlas* ea){
 	unsigned int dx = ea->atlas.w / ea->cx;
 	unsigned int dy = ea->atlas.h / ea->cy;
 	
-	FDuration d = Time_Elapsed(0UL,Time_Nano());
-	d = d - F32_Floor(d);
-	d *= 0.5f;
-	d = d - F32_Floor(d);
+	FDuration d = Animation_Phase(0UL,0.5f);
 	ox = 0U + (int)(2.0f * d);
 	
 	dy *= 2;
@@ -1425,10 +1404,7 @@ SubSprite Plant_GetRender(Plant* e,EntityAtlas* ea){
 	unsigned int dx = ea->atlas.w / ea->cx;
 	unsigned int dy = ea->atlas.h / ea->cy;
 
-	FDuration d = Time_Elapsed(0UL,Time_Nano());
-	d = d - F32_Floor(d);
-	d *= 0.5f;
-	d = d - F32_Floor(d);
+	FDuration d = Animation_Phase(0UL,0.5f);
 	ox = 0U + (int)(2.0f * d);
 
 	dy *= 2;
@@ -1527,10 +1503,7 @@ SubSprite Spike_GetRender(Spike* e,EntityAtlas* ea){
 	unsigned int dx = ea->atlas.w / ea->cx;
 	unsigned int dy = ea->atlas.h / ea->cy;
 
-	FDuration d = Time_Elapsed(0UL,Time_Nano());
-	d = d - F32_Floor(d);
-	d *= F32_Abs(e->e.v.x) * 0.5f;
-	d = d - F32_Floor(d);
+	FDuration d = Animation_Phase(0UL,F32_Abs(e->e.v.x) * 0.5f);
 	unsigned int a = (int)(2.0f * d);
 
 	ox = a;
@@ -1874,10 +1847,7 @@ SubSprite Explosion_GetRender(Explosion* e,EntityAtlas* ea){
 	unsigned int dx = ea->atlas.w / ea->cx;
 	unsigned int dy = ea->atlas.h / ea->cy;
 
-	FDuration d = Time_Elapsed(0UL,Time_Nano());
-	d = d - F32_Floor(d);
-	d *= F32_Abs(e->e.v.x) * 1.5f;
-	d = d - F32_Floor(d);
+	FDuration d = Animation_Phase(0UL,F32_Abs(e->e.v.x) * 1.5f);
 	ox = 0U + (int)(3.0f * d);
 
 	return SubSprite_New(&ea->atlas,ox * dx,oy * dy,dx,dy);
@@ -2046,10 +2016,7 @@ SubSprite Fireball_GetRender(Fireball* e,EntityAtlas* ea){
 	unsigned int dx = ea->atlas.w / ea->cx;
 	unsigned int dy = ea->atlas.h / ea->cy;
 
-	FDuration d = Time_Elapsed(0UL,Time_Nano());
-	d = d - F32_Floor(d);
-	d *= F32_Abs(e->e.v.x) * 0.25f;
-	d = d - F32_Floor(d);
+	FDuration d = Animation_Phase(0UL,F32_Abs(e->e.v.x) * 0.25f);
 	ox = 0U + (int)(4.0f * d);
 
 	return SubSprite_New(&ea->atlas,ox * dx,oy * dy,dx,dy);
@@ -2194,10 +2161,7 @@ SubSprite Firebeam_GetRender(Firebeam* e,EntityAtlas* ea){
 
 	dx *= 2;
 
-	FDuration d = Time_Elapsed(0UL,Time_Nano());
-	d = d - F32_Floor(d);
-	d *= F32_Abs(e->e.v.x) * 1.0f;
-	d = d - F32_Floor(d);
+	FDuration d = Animation_Phase(0UL,F32_Abs(e->e.v.x) * 1.0f);
 	ox = 0U + (int)(2.0f * d);
 
 	if(e->e.v.x > 0.0f) ox = 3 - ox;
@@ -2350,10 +2314,7 @@ SubSprite Hammer_GetRender(Hammer* e,EntityAtlas* ea){
 	unsigned int dx = ea->atlas.w / ea->cx;
 	unsigned int dy = ea->atlas.h / ea->cy;
 
-	FDuration d = Time_Elapsed(0UL,Time_Nano());
-	d = d - F32_Floor(d);
-	d *= F32_Abs(e->e.v.x) * 0.25f;
-	d = d - F32_Floor(d);
+	FDuration d = Animation_Phase(0UL,F32_Abs(e->e.v.x) * 0.25f);
 	ox = 0U + (int)(4.0f * d);
 	
 	return SubSprite_New(&ea->atlas,ox * dx,oy * dy,dx,dy);
@@ -2918,11 +2879,8 @@ SubSprite Mario_GetRender(Mario* m,EntityAtlas* ea){
 	else if(m->reverse)		        ox = 3U,oy = 0U;
 	else if(m->e.v.x==0.0f)	        ox = 7U,oy = 0U;
 	else{
-		FDuration d = Time_Elapsed(m->start,Time_Nano());
+		FDuration d = Animation_Phase(m->start,F32_Abs(m->e.v.x) * 0.65f);
 		//d *= (F32_Abs(f->v.x) / F32_Max(MARIO_VEL_MAX_GRD,MARIO_VEL_MAX_AIR));
-		d = d - F32_Floor(d);
-		d *= F32_Abs(m->e.v.x) * 0.65f;
-		d = d - F32_Floor(d);
 
 		ox = 4U + (int)(3.0f * d);
         oy = 0U;

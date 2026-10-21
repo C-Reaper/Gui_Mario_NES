@@ -103,6 +103,16 @@ typedef struct Animation {
 	};
 } Animation;
 
+FDuration Animation_Phase(Timepoint start,FDuration frequency){
+	if(frequency <= 0.0 || !isfinite(frequency)) return 0.0;
+
+	const Timepoint now = Time_Nano();
+	const FDuration elapsed = (FDuration)(now - start) / (FDuration)TIME_NANOTOSEC;
+	FDuration phase = fmod(elapsed * frequency,1.0);
+	if(phase < 0.0) phase += 1.0;
+	return phase;
+}
+
 Animation Animation_New(AnimationType type,char bg,SpawnType spawner){
 	Animation a;
 	memset(&a,0,sizeof(a));
@@ -236,7 +246,7 @@ void Animation_Resize(Animation* a,unsigned int width,unsigned int height){
 		case ANIMATIONTYPE_ATLAS:{
 			const unsigned int w = a->atlas_img.w / a->atlas_cx;
 			const unsigned int h = a->atlas_img.h / a->atlas_cy;
-			if(w != width || w != height){
+			if(w != width || h != height){
 				Sprite_Reload(&a->atlas_img,width * a->atlas_cx,height * a->atlas_cy);
 			}
 			break;
@@ -254,7 +264,7 @@ void Animation_Resize(Animation* a,unsigned int width,unsigned int height){
 		case ANIMATIONTYPE_ANIMATIONATLAS:{
 			const unsigned int w = a->aatlas_img.w / a->aatlas_cx;
 			const unsigned int h = a->aatlas_img.h / a->aatlas_cy;
-			if(w != width || w != height){
+			if(w != width || h != height){
 				Sprite_Reload(&a->aatlas_img,width * a->aatlas_cx,height * a->aatlas_cy);
 			}
 			break;
@@ -628,18 +638,24 @@ SubSprite World_Img(World* w,Block b,unsigned int x,unsigned int y){
 			case ANIMATIONTYPE_ATLAS:	return a->atlas_get(a,w,x,y);
 			case ANIMATIONTYPE_SPRITES:	return a->sprites_get(a,w,x,y);
 			case ANIMATIONTYPE_ANIMATIONATLAS:{
-				const double t = Time_Nano() / (double)TIME_NANOTOSEC;
-				const double p = (double)t / a->aatlas_duration;
-				const int img = (int)((p - F64_Floor(p)) * a->aatlas_cx);
+				if(!a->aatlas_img.img || a->aatlas_cx == 0U || a->aatlas_cy == 0U || a->aatlas_duration <= 0.0)
+					return SubSprite_Null();
+				const FDuration phase = Animation_Phase(a->aatlas_start,1.0 / a->aatlas_duration);
+				unsigned int img = (unsigned int)(phase * a->aatlas_cx);
+				if(img >= a->aatlas_cx) img = a->aatlas_cx - 1U;
 				const unsigned int dx = a->aatlas_img.w / a->aatlas_cx;
 				const unsigned int dy = a->aatlas_img.h / a->aatlas_cy;
+				if(dx == 0U || dy == 0U) return SubSprite_Null();
 				return SubSprite_New(&a->aatlas_img,img * dx,0.0f,dx,dy);
 			}
 			case ANIMATIONTYPE_ANIMATION:{
-				const double t = Time_Nano() / (double)TIME_NANOTOSEC;
-				const double p = (double)t / a->animation_duration;
-				const int img = (int)((p - F64_Floor(p)) * a->animation_img.size);
-				Sprite* s = (Sprite*)Vector_Get(&a->animation_img,img);
+				if(a->animation_img.size <= 0 || a->animation_duration <= 0.0)
+					return SubSprite_Null();
+				const FDuration phase = Animation_Phase(a->animation_start,1.0 / a->animation_duration);
+				unsigned int img = (unsigned int)(phase * a->animation_img.size);
+				if(img >= (unsigned int)a->animation_img.size) img = (unsigned int)a->animation_img.size - 1U;
+				Sprite* s = (Sprite*)Vector_Get(&a->animation_img,(int)img);
+				if(!s || !s->img) return SubSprite_Null();
 				return SubSprite_New(s,0.0f,0.0f,s->w,s->h);
 			}
 			default:					return SubSprite_Null();

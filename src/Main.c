@@ -333,7 +333,7 @@ void Delete(AlxWindow* w){
 }
 
 int main(){
-    if(Create("Mario NES",400,300,4,4,Setup,Update,Delete))
+    if(Create("Mario NES",800,600,2,2,Setup,Update,Delete))
         Start();
     return 0;
 }

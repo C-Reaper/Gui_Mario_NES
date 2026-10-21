@@ -1,22 +1,27 @@
 //#define IMAGE_PNG_ONLY
 
+#if defined __linux__ || defined _WINE || defined _WEB
+#include "/home/codeleaded/System/Static/Library/PS4_Controller.h"
 #include "/home/codeleaded/System/Static/Library/WindowEngine.h"
 #include "/home/codeleaded/System/Static/Library/Files.h"
 #include "/home/codeleaded/System/Static/Library/TransformedView.h"
 #include "/home/codeleaded/System/Static/Library/Geometry.h"
 #include "/home/codeleaded/System/Static/Library/AudioPlayer.h"
-#include "/home/codeleaded/System/Static/Library/PS4_Controller.h"
+#elif defined _WIN32
+#include "F:/home/codeleaded/System/Static/Library/PS4_Controller.h"
+#include "F:/home/codeleaded/System/Static/Library/WindowEngine.h"
+#include "F:/home/codeleaded/System/Static/Library/Files.h"
+#include "F:/home/codeleaded/System/Static/Library/TransformedView.h"
+#include "F:/home/codeleaded/System/Static/Library/Geometry.h"
+#include "F:/home/codeleaded/System/Static/Library/AudioPlayer.h"
+#endif
 
-#include "World.h"
-#include "Figure.h"
-#include "Mario.h"
+#include "../src/World.h"
+#include "../src/Figure.h"
+#include "../src/Mario.h"
 
 MarioWorld world;
 PS4_Controller ps4c;
-
-unsigned int prevscore;
-unsigned int playerid;
-
 
 void Setup(AlxWindow* w){
 	AlxFont_Resize(&window.font,32,32);
@@ -25,12 +30,9 @@ void Setup(AlxWindow* w){
 	//ps4c = PS4_Controller_Null();
 	
 	world = MarioWorld_New("./assets/World/Level0.txt","./assets/Blocks/","./assets/Entity/","./assets/Shooters/");
-	MarioWorld_AudioPlayerStart(&world);
-
-	prevscore = 0U;
+	//MarioWorld_AudioPlayerStart(&world);
 }
 void Update(AlxWindow* w){
-
 	PS4_Controller_Update(&ps4c);
 	
 	TransformedView_Output(&world.tv,(Vec2){ GetWidth(),GetHeight() });
@@ -153,9 +155,9 @@ void Update(AlxWindow* w){
 			Figure_Move(&world.mario,-1.0f);
 		else if(Stroke(ALX_KEY_D).DOWN)
 			Figure_Move(&world.mario,1.0f);
-		else if(abs >= 0 && abs < 100) 	Figure_Move(&world.mario,F32_Map(abs,0.0f,255.0f,-1.0f,1.0f));// DZ: -28
-		else if(abs >= 156) 			Figure_Move(&world.mario,F32_Map(abs,0.0f,255.0f,-1.0f,1.0f));// DZ: +28
-		else 							Figure_Move(&world.mario,0.0f);
+		else if(abs >= 0 && abs < 128) 								Figure_Move(&world.mario,F32_Map(abs,0.0f,255.0f,-1.0f,1.0f));
+		else if(abs >= 128) 										Figure_Move(&world.mario,F32_Map(abs,0.0f,255.0f,-1.0f,1.0f));
+		else 														Figure_Move(&world.mario,0.0f);
 		
 		if(world.mario.e->id==ENTITY_MARIO){
 			if(Stroke(ALX_KEY_W).PRESSED || PS4_Controller_Key(&ps4c,PS4_CONTROLLER_X).PRESSED){
@@ -268,10 +270,12 @@ void Update(AlxWindow* w){
 		}
 	}
 
-	CStr_RenderAlxFontf(WINDOW_STD_ARGS,&window.font,0.0f,0.0f,WHITE,"S:%d,%d | L:%d",(Number)window.Width,(Number)window.Height,(Number)world.level);
+
+	CStr_RenderAlxFontf(WINDOW_STD_ARGS,&window.font,0.0f,0.0f,WHITE,"Q DBG, BLOCK: 1 PRE, 2 POST, LVL: 7 DOWN,8 UP,9 LOAD,0 SAVE");
+	CStr_RenderAlxFontf(WINDOW_STD_ARGS,&window.font,0.0f,window.font.CharSizeY,WHITE,"S:%d,%d | L:%d",(Number)window.Width,(Number)window.Height,(Number)world.level);
 	
 	if(world.mario.e->id==ENTITY_MARIO)
-		CStr_RenderAlxFontf(WINDOW_STD_ARGS,&window.font,0.0f,window.font.CharSizeY,WHITE,"Score: %d",(Number)((Mario*)world.mario.e)->score);
+		CStr_RenderAlxFontf(WINDOW_STD_ARGS,&window.font,0.0f,2 * window.font.CharSizeY,WHITE,"Score: %d",(Number)((Mario*)world.mario.e)->score);
 }
 void Delete(AlxWindow* w){
 	PS4_Controller_Free(&ps4c);
@@ -279,7 +283,7 @@ void Delete(AlxWindow* w){
 }
 
 int main(){
-    if(Create("Mario NES",1920,1080,1,1,Setup,Update,Delete))
+    if(Create("Mario NES",800,600,2,2,Setup,Update,Delete))
         Start();
     return 0;
 }
